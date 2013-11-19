@@ -1,4 +1,4 @@
-pma-scripts
+PMA Scripts
 ===========
 
 Scripts para acesso ao PMA
