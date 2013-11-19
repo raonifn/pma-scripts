@@ -2,26 +2,31 @@
 
 source pma_util
 
-function usage() {
-  cat <<END
-Usage $(basename $0) [date]
-   date: Date to search (yyyy-MM-dd). Default value is today (date +'%F')
-END
+function list() {
+  date=$1
+  resp=$(curl -s -X post https://pma.dextra.com.br/pma/services/listar_apontamentos -d token=$(cat $HOME/.pma_token)\&data=$date)
+
+  handlePmaResponse "$resp"
+
+  if [ $response_code != '0' ]; then
+     echo "$response_error"
+     exit 1
+  fi
+
+  list=$(echo $resp | xpath -q -e "//apontamento/child::node()/text()" | sed "s/ /_/g")
+
+  group "$list" 6
+  echo "$group_result"
 }
 
-date=${1-$(date +'%F')}
-
-resp=$(curl -s -X post https://pma.dextra.com.br/pma/services/listar_apontamentos -d token=$(cat $HOME/.pma_token)\&data=$date)
-
- 
-handlePmaResponse "$resp"
-
-if [ $response_code != '0' ]; then
-   echo "$response_error"
-   exit 1
+if [ $# -le 1 ]; then
+  date=${1-$(date +'%F')}
+  list $date
+  exit
 fi
 
-list=$(echo $resp | xpath -q -e "//apontamento/child::node()/text()" | sed "s/ /_/g")
-
-group "$list" 6
-echo "$group_result"
+for k do
+  echo $k
+  list $k
+  echo
+done

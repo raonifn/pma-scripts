@@ -24,12 +24,13 @@ function tasks() {
   echo "$group_result"
 }
 
-if [ $# -gt 1 ]; then
-  for k in $@; do
-    echo "Project $k"
-    tasks "$k"
-    echo
-  done
-else
+if [ $# -eq 1 ]; then
   tasks "$1"
+  exit 0
 fi
+
+for k do
+  echo "Project $k"
+  tasks "$k"
+  echo
+done

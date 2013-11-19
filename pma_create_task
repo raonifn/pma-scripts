@@ -2,7 +2,7 @@
  
 function usage() {
   cat <<END
-Usage $(basename $0) [options] <taskid> [description]
+Usage: $(basename $0) [options] <taskid> [description]
    -h                 : This help
    -d <date>          : Date to create (yyyy-MM-dd). Default value is today (date +'%F')
    -e <effort time>   : Effort time (minutes). Default value is 480 (8 * 60)
