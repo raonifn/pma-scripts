@@ -3,6 +3,14 @@ pma-scripts
 
 Scripts para acesso ao PMA
 
+Exemplo de uso:
+---------------
+
+    pma_token $USER
+    pma_create_day && pma_projects | grep RH | cut -s "|" -f 3 | xargs pma_tasks | cut -s "|" -f2 | xargs pma_create_task -e 60
+    pma_logout
+    
+
 pma_token
 ---------
 
