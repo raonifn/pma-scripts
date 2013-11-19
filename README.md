@@ -14,17 +14,18 @@ Exemplo de uso:
 pma_token
 ---------
 
-Faz login no PMA e guarda token no arquivo *$HOME/.pma_token*. Demais scripts usarão este arquivo para obter o token. Pede a senha durante a execução.
+Faz login no PMA e guarda token no arquivo *$HOME/.pma_token*. Demais scripts usarão este arquivo para obter o token.
+Caso usuário seja omitido, utiliza *$USER*. Pede a senha durante a execução.
 
-    pma_token <username>
+    pma_token [username]
     
 
 pma_logout
 ---------
 
-Faz o logout do PMA. Pede a senha durante a execução.
+Faz o logout do PMA. Pede a senha durante a execução. Caso usuário seja omitido, utiliza *$USER*.
 
-    pma_logout <username>
+    pma_logout [username]
 
 pma_projects
 ---------
