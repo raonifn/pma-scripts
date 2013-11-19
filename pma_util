@@ -15,3 +15,35 @@ function handlePmaResponse() {
     response_msgs=$(echo $response | xpath -q -e '//mensagem/text()')
   fi
 }
+
+function group() {
+  src=$1
+  size=$2
+  if [ $# -eq 3 ]; then
+    sep=$3
+  else
+    sep='|'
+  fi
+
+
+  group_result=''
+
+  count=0
+  line=''
+  for k in $src; do
+     (( count++ ))
+     if [ ${#line} -gt 0 ]; then
+        line="${line}${sep} "
+     fi
+     line="${line}${k}"
+
+     if [ $count -eq $size ]; then
+        if [ ${#group_result} -gt 0 ]; then
+          group_result=${group_result}$'\n'
+        fi
+        group_result="${group_result}${line}"
+        line=''
+        count=0
+    fi
+  done
+}
