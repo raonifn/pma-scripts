@@ -9,7 +9,16 @@ source pma_util
 function tasks() {
   projectid=$1
 
-  list=$(curl -s -X post https://pma.dextra.com.br/pma/services/listar_atividades -d token=$(cat $HOME/.pma_token)\&projeto=$projectid | xpath -q -e "//atividade/nome/text() | //atividade/id/text()" | sed "s/ /_/g")
+  resp=$(curl -s -X post https://pma.dextra.com.br/pma/services/listar_atividades -d token=$(cat $HOME/.pma_token)\&projeto=$projectid)
+
+  handlePmaResponse "$resp"
+
+  if [ $response_code != '0' ]; then
+     echo "$response_error"
+     return
+  fi
+
+  list=$(echo $resp | xpath -q -e "//atividade/nome/text() | //atividade/id/text()" | sed "s/ /_/g")
 
   group "$list" 2
   echo "$group_result"
@@ -19,6 +28,7 @@ if [ $# -gt 1 ]; then
   for k in $@; do
     echo "Project $k"
     tasks "$k"
+    echo
   done
 else
   tasks "$1"
