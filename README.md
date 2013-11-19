@@ -6,7 +6,7 @@ Scripts para acesso ao PMA
 Exemplo de uso:
 ---------------
 
-    pma_token $USER
+    pma_token
     pma_create_day && pma_projects | grep RH | cut -d "|" -f 3 | xargs pma_tasks | cut -d "|" -f2 | xargs pma_create_task -e 60
     pma_logout
     
