@@ -1,0 +1,11 @@
+#!/bin/bash -x
+
+today=$(date +'%F')
+
+atividade=$1
+
+curl -s -X post https://pma.dextra.com.br/pma/services/criar_apontamento -d token=$(cat $HOME/.pma_token)\&data=$today\&atividadeId=$atividade\&atividadeStatus=working\&esforco=480\&descricao=Devel  
+
+
+#URL:  https://pma.dextra.com.br/pma/services/criar_apontamento 
+#PARÂMETROS: token, data(yyyy-mm-dd), atividadeId, atividadeStatus("working" ou "concluded"), esforco(min), descricao 

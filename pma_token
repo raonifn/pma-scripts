@@ -1,0 +1,15 @@
+#!/bin/bash 
+
+if [ $# -lt 1 ]; then 
+  echo "Usage: $(basename $0) <username>"
+  exit 1
+fi
+
+
+username=$1
+
+echo 'Getting Token'
+stty -echo
+read -p "Senha: " pass
+stty echo
+curl -s -X post https://pma.dextra.com.br/pma/services/obter_token -d username=$username\&password=$pass | xpath -q -e "//token/text()" > $HOME/.pma_token

@@ -1,0 +1,30 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]; then 
+  echo "Usage: $(basename $0) <projectid>"
+  exit 1
+fi
+
+
+projectid=$1
+
+
+list=$(curl -s -X post https://pma.dextra.com.br/pma/services/listar_atividades -d token=$(cat $HOME/.pma_token)\&projeto=$projectid | xpath -q -e "//atividade/nome/text() | //atividade/id/text()" | sed "s/ /_/g")
+
+count=0
+line=''
+for k in $list; do
+   (( count++ ))
+   if [ ${#line} -gt 0 ]; then
+      line="$line | "
+   fi
+   line="${line}${k}"
+
+   if [ $count -eq 2 ]; then
+      echo $line 
+      line=''
+      count=0
+  fi
+done
+
+

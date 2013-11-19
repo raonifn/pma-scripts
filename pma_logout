@@ -1,0 +1,4 @@
+#!/bin/bash 
+
+echo 'Logouting'
+curl -s https://pma.dextra.com.br/pma/services/invalidar_tokens

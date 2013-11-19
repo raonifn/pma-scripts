@@ -1,0 +1,20 @@
+#!/bin/bash 
+
+list=$(curl -s -X post https://pma.dextra.com.br/pma/services/listar_projetos -d token=$(cat $HOME/.pma_token) | xpath -q -e "//projeto/cliente/text() | //projeto/nome/text() | //projeto/id/text()" | sed "s/ /_/g")
+
+count=0
+line=''
+for k in $list; do
+   (( count++ ))
+   if [ ${#line} -gt 0 ]; then
+      line="$line | "
+   fi
+   line="${line}${k}"
+
+   if [ $count -eq 3 ]; then
+      echo $line 
+      line=''
+      count=0
+  fi
+done
+
