@@ -1,7 +1,15 @@
 #!/bin/bash 
 
-list=$(curl -s -X post https://pma.dextra.com.br/pma/services/listar_projetos -d token=$(cat $HOME/.pma_token) | xpath -q -e "//projeto/cliente/text() | //projeto/nome/text() | //projeto/id/text()" | sed "s/ /_/g")
-
 source pma_util
+resp=$(curl -s -X post https://pma.dextra.com.br/pma/services/listar_projetos -d token=$(cat $HOME/.pma_token)) 
+handlePmaResponse "$resp"
+
+if [ $response_code != '0' ]; then
+   echo "$response_error"
+   exit 1
+fi
+
+list=$(echo $resp | xpath -q -e "//projeto/cliente/text() | //projeto/nome/text() | //projeto/id/text()" | sed "s/ /_/g")
+
 group "$list" 3
 echo "$group_result"
