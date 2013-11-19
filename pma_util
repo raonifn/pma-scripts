@@ -1,0 +1,17 @@
+function readPass() {
+  username=$1
+  stty -echo
+  read -p "($username) Password: " password
+  stty echo
+  echo
+}
+
+function handlePmaResponse() {
+  response=$1
+  response_code=$(echo $response | xpath -q -e '//responseType/text()')
+  if [ $response_code -ne 0 ]; then
+    response_error=$(echo $response | xpath -q -e '//erro/text()')
+  else
+    response_msgs=$(echo $response | xpath -q -e '//mensagem/text()')
+  fi
+}

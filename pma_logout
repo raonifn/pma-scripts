@@ -1,4 +1,23 @@
 #!/bin/bash 
 
-echo 'Logouting'
-curl -s https://pma.dextra.com.br/pma/services/invalidar_tokens
+if [ $# -lt 1 ]; then 
+  echo "Usage: $(basename $0) <username>"
+  exit 1
+fi
+
+username=$1
+
+source pma_util
+
+readPass "$username"
+
+resp=$(curl -s -X post https://pma.dextra.com.br/pma/services/invalidar_tokens -d username=$username\&password=$password)
+
+handlePmaResponse "$resp"
+
+if [ $response_code != '0' ]; then
+   echo "$response_error"
+   exit 1
+fi
+
+echo "$response_msgs"
