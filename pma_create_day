@@ -2,6 +2,7 @@
 
 function usage() {
   cat <<END
+Usage $(basename $0) [options]
    -h                 : This help
    -d <date>          : Date to create (yyyy-MM-dd). Default value is today (date +'%F')
    -s <start time>    : Start time (HH:mm). Default value is '09:00'

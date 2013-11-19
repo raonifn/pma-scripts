@@ -1,11 +1,51 @@
-#!/bin/bash -x
+#!/bin/bash
+ 
+function usage() {
+  cat <<END
+Usage $(basename $0) [options] <taskid> [description]
+   -h                 : This help
+   -d <date>          : Date to create (yyyy-MM-dd). Default value is today (date +'%F')
+   -e <effort time>   : Effort time (minutes). Default value is 480 (8 * 60)
+   -s <status>        : Status ('working' or 'concluded'). Default value is 'working'
+Description is not required. Default value is 'Devel'.
+END
+}
 
-today=$(date +'%F')
+if [ $# -lt 1 ]; then
+  usage
+  exit 1
+fi
 
-atividade=$1
+while getopts "h?e:d:s:" opt; do
+    case "$opt" in
+    h|\?)
+        usage
+        exit 0
+        ;;
+    d)  date="$OPTARG" ;;
+    e)  effort="$OPTARG" ;;
+    s)  stat="$OPTARG" ;;
 
-curl -s -X post https://pma.dextra.com.br/pma/services/criar_apontamento -d token=$(cat $HOME/.pma_token)\&data=$today\&atividadeId=$atividade\&atividadeStatus=working\&esforco=480\&descricao=Devel  
+    esac
+done
+date=${date-$(date +'%F')}
+effort=${effort-'480'}
+stat=${stat-'working'}
+shift $(( OPTIND-1 ))
 
+task=$1
+shift
+description=${@-'Devel'}
+description=$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$description")
 
-#URL:  https://pma.dextra.com.br/pma/services/criar_apontamento 
-#PARÂMETROS: token, data(yyyy-mm-dd), atividadeId, atividadeStatus("working" ou "concluded"), esforco(min), descricao 
+resp=$(curl -s -X post https://pma.dextra.com.br/pma/services/criar_apontamento -d token=$(cat $HOME/.pma_token)\&data=$date\&atividadeId=$task\&atividadeStatus=$stat\&esforco=$effort\&descricao=$description)
+
+source pma_util
+handlePmaResponse "$resp"
+
+if [ $response_code != '0' ]; then
+   echo "$response_error"
+   exit 1
+fi
+
+echo "$response_msgs"
