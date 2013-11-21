@@ -19,12 +19,7 @@ function handlePmaResponse() {
 function group() {
   src=$1
   size=$2
-  if [ $# -eq 3 ]; then
-    sep=$3
-  else
-    sep='|'
-  fi
-
+  sep=${3-'|'}
 
   group_result=''
 
