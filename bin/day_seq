@@ -1,0 +1,63 @@
+#!/bin/bash
+
+function usage() {
+  cat <<END
+Usage: $(basename $0) <startDate: yyyy-MM-dd> <endDate: yyyy-MM-dd>
+   -h                 : This help
+END
+}
+
+function convert() {
+  date=$1
+  convert_val=$(date -d $date +%s)
+  ret=$?
+  if [[ $ret -ne 0 ]]; then
+    echo "$date is invalid"
+    exit 1
+  fi
+}
+
+function validate_dates() {
+  start=$1
+  end=$2
+
+  convert $start
+  start_time=$convert_val
+
+  convert $end
+  end_time=$convert_val
+ 
+  if [[ $start -lt $end ]]; then
+    echo "Start date must be greater than end"
+    exit 1
+  fi
+
+}
+
+while getopts "h?" opt; do
+    case "$opt" in
+    h|\?)
+        usage
+        exit 0
+        ;;
+
+    esac
+done
+
+if [[ $# -ne 2 ]]; then
+  usage;
+  exit 1
+fi
+
+start=$1
+end=$2
+
+validate_dates $start $end
+
+sum=0
+current=$start
+
+while [[ $current < $end || $current == $end ]]; do
+  echo $current
+  current=$(date -d "$current 1 day" +%Y-%m-%d) 
+done
