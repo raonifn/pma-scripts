@@ -4,7 +4,7 @@ source pma_util
 
 function list() {
   date=$1
-  resp=$(curl -s -X post https://pma.dextra.com.br/pma/services/listar_apontamentos -d token=$(cat $HOME/.pma_token)\&data=$date)
+  resp=$(curl -s -X post https://dextranet.dextra.com.br/pma/services/listar_apontamentos -d token=$(cat $HOME/.pma_token)\&data=$date)
 
   handlePmaResponse "$resp"
 
