@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 source pma_util
-resp=$(curl -s -X post https://pma.dextra.com.br/pma/services/listar_projetos -d token=$(cat $HOME/.pma_token)) 
+resp=$(curl -s -X post https://dextranet.dextra.com.br/pma/services/listar_projetos -d token=$(cat $HOME/.pma_token)) 
 handlePmaResponse "$resp"
 
 if [ $response_code != '0' ]; then

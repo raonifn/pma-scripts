@@ -6,7 +6,7 @@ source pma_util
 
 readPass "$username"
 
-resp=$(curl -s -X post https://pma.dextra.com.br/pma/services/obter_token -d username=$username\&password=$password)
+resp=$(curl -s -X post https://dextranet.dextra.com.br/pma/services/obter_token -d username=$username\&password=$password)
 
 handlePmaResponse "$resp"
 

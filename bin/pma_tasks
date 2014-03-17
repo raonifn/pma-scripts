@@ -9,7 +9,7 @@ source pma_util
 function tasks() {
   projectid=$1
 
-  resp=$(curl -s -X post https://pma.dextra.com.br/pma/services/listar_atividades -d token=$(cat $HOME/.pma_token)\&projeto=$projectid)
+  resp=$(curl -s -X post https://dextranet.dextra.com.br/pma/services/listar_atividades -d token=$(cat $HOME/.pma_token)\&projeto=$projectid)
 
   handlePmaResponse "$resp"
 
