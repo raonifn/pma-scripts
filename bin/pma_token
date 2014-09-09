@@ -2,7 +2,7 @@
 
 username=${1-$USER}
 
-source pma_util
+source "${BASH_SOURCE%/*}/pma_util"
 
 readPass "$username"
 
