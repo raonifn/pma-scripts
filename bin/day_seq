@@ -27,7 +27,7 @@ function validate_dates() {
   convert $end
   end_time=$convert_val
  
-  if [[ $start -lt $end ]]; then
+  if [[ $start < $end ]]; then
     echo "Start date must be greater than end"
     exit 1
   fi
