@@ -45,10 +45,6 @@ while getopts "h?w?" opt; do
     esac
 done
 
-#if [ "$exclude_weekends" == "true" ]; then
-#  echo "xxxxxxx"
-#fi
-
 if [[ $# -ne $(( $OPTIND + 1 )) ]]; then
   usage;
   exit 1
