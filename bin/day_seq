@@ -26,7 +26,7 @@ function validate_dates() {
 
   convert $end
   end_time=$convert_val
- 
+
   if [[ $start > $end ]]; then
     echo "Start date must be lesser than end"
     exit 1
@@ -34,23 +34,28 @@ function validate_dates() {
 
 }
 
-while getopts "h?" opt; do
+while getopts "h?w?" opt; do
     case "$opt" in
     h|\?)
         usage
         exit 0
         ;;
+    w)  exclude_weekends="true" ;;
 
     esac
 done
 
-if [[ $# -ne 2 ]]; then
+#if [ "$exclude_weekends" == "true" ]; then
+#  echo "xxxxxxx"
+#fi
+
+if [[ $# -ne $(( $OPTIND + 1 )) ]]; then
   usage;
   exit 1
 fi
 
-start=$1
-end=$2
+start=${@:$OPTIND:1}
+end=${@:$OPTIND+1:1}
 
 validate_dates $start $end
 
@@ -58,6 +63,8 @@ sum=0
 current=$start
 
 while [[ $current < $end || $current == $end ]]; do
-  echo $current
-  current=$(date -d "$current 1 day" +%Y-%m-%d) 
+  if [[ "$exclude_weekends" != "true" || $(date -d "$current" +%u) -lt 6 ]]; then
+    echo $current
+  fi
+  current=$(date -d "$current 1 day" +%Y-%m-%d)
 done
