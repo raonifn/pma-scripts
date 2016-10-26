@@ -59,8 +59,8 @@ sum=0
 current=$start
 
 while [[ $current < $end || $current == $end ]]; do
-  if [[ "$exclude_weekends" != "true" || $(date -d "$current" +%u) -lt 6 ]]; then
+  if [[ "$exclude_weekends" != "true" || $(date -d "$current 12:00" +%u) -lt 6 ]]; then
     echo $current
   fi
-  current=$(date -d "$current 1 day" +%Y-%m-%d)
+  current=$(date -d "$current 12:00 1 day" +%Y-%m-%d)
 done
