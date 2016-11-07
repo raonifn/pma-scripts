@@ -1,8 +1,6 @@
 function readPass() {
   username=$1
-  stty -echo
-  read -p "($username) Password: " password
-  stty echo
+  read -sp "($username) Password: " password
   echo
 }
 
