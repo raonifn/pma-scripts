@@ -1,0 +1,47 @@
+#!/bin/bash -e
+
+basename="$(dirname $0)"
+
+echo "$basename"
+
+startdate=2017-02-01
+enddate=2017-02-28
+weekends=yes
+
+#read -r -p 'Start date (yyyy-MM-dd): ' startdate
+#read -r -p 'End date: (yyyy-MM-dd): ' enddate
+#read -r -p 'Include weekends: (no): ' weekends
+
+if [ "$weekends" == "yes" ]; then
+    days=$($basename/day_seq "$startdate" "$enddate")
+else
+    days=$($basename/day_seq -w "$startdate" "$enddate")
+fi
+
+function week_day_name() {
+    names="000MonTueWedThuFriSatSun"
+    idx="$(date -d "$k 12:00" +%u)"
+    idx=$((idx * 3))
+    echo ${names:$idx:3}
+}
+
+function print_days() {
+    echo "$days" | while read k; do
+        echo "$k $(week_day_name $day)"
+    done
+    echo "Total: $(echo "$days" | wc -l)"
+}
+
+print_days
+
+while [ 1 ]; do
+    read -p 'Ignore: (yyyy-MM-dd): ' holyday
+    if [ "x$holyday" == "x" ]; then break; fi
+    tempdays="$(echo "$days" | grep -v "^$holyday$")"
+    days="$tempdays"
+done
+
+print_days
+
+
+#echo "xxx: $holyday"
