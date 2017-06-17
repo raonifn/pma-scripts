@@ -40,7 +40,7 @@ description=$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$description"
 
 resp=$(curl -s -X post https://dextranet.dextra.com.br/pma/services/criar_apontamento -d token=$(cat $HOME/.pma_token)\&data=$date\&atividadeId=$task\&atividadeStatus=$stat\&esforco=$effort\&descricao=$description)
 
-source pma_util
+source "${BASH_SOURCE%/*}/pma_util"
 handlePmaResponse "$resp"
 
 if [ $response_code != '0' ]; then

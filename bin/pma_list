@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-source pma_util
+source "${BASH_SOURCE%/*}/pma_util"
 
 function list() {
   date=$1
