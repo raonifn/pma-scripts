@@ -30,7 +30,7 @@ endtime=${endtime-'18:00'}
 interval=${interval-'01:00'}
 
 
-resp=$(curl -s -X post https://dextranet.dextra.com.br/pma/services/criar_apontamento_diario -d token=$(cat $HOME/.pma_token)\&data=$date\&inicio=$starttime\&intervalo=$interval\&fim=$endtime)
+resp=$(curl -s -X post https://pma.dextra.com.br/services/criar_apontamento_diario -d token=$(cat $HOME/.pma_token)\&data=$date\&inicio=$starttime\&intervalo=$interval\&fim=$endtime)
 
 source pma_util
 handlePmaResponse "$resp"
