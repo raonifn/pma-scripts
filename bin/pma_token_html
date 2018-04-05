@@ -1,0 +1,18 @@
+#!/bin/bash 
+
+username=${1-$USER}
+
+source pma_util
+
+readPass "$username"
+
+token=$(curl -o /dev/null -s -c - 'https://pma.dextra.com.br' | grep  pma.dextra.com.br | cut -f7)
+resp=$(curl -s https://pma.dextra.com.br/login/login -H "Cookie: _pma_session=$token" -d "usuario%5Blogin%5D=$username&usuario%5Bsenha%5D=$password")
+
+if ! echo $resp | grep -q 'registros/new'; then
+  echo 'Login fail'
+  exit 1
+fi
+
+echo $token
+echo $token > $HOME/.pma_token_html

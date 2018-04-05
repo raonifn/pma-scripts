@@ -9,7 +9,7 @@ Exemplo de uso:
     pma_token
     pma_create_day && pma_projects | grep RH | cut -d "|" -f 3 | xargs pma_tasks | cut -d "|" -f2 | xargs pma_create_task -e 60
     pma_logout
-    
+
 
 pma_token
 ---------
@@ -18,7 +18,7 @@ Faz login no PMA e guarda token no arquivo *$HOME/.pma_token*. Demais scripts us
 Caso usuário seja omitido, utiliza *$USER*. Pede a senha durante a execução.
 
     pma_token [username]
-    
+
 
 pma_logout
 ---------
@@ -52,7 +52,7 @@ Cria apontamento diário. Caso não seja passado nenhum parâmetro, cria para o 
         -s <start time>    : Start time (HH:mm). Default value is '09:00'
         -e <end time>      : End time (HH:mm). Default value is '18:00'
         -i <interval time> : Interval time (HH:mm). Default value is '01:00'
-        
+
 pma_create_task
 ---------------
 
