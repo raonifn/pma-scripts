@@ -36,7 +36,6 @@ shift $(( OPTIND-1 ))
 task=$1
 shift
 description=${@-'Devel'}
-#description=$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$description")
 
 resp=$(curl -s -X post -G --data-urlencode token=$(cat $HOME/.pma_token) --data-urlencode data=$date --data-urlencode "atividadeId=$task" --data-urlencode "atividadeStatus=$stat" --data-urlencode "esforco=$effort" --data-urlencode "descricao=$description" https://pma.dextra.com.br/services/criar_apontamento)
 
