@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $# -lt 1 ]; then 
+if [ $# -lt 1 ]; then
   echo "Usage: $(basename $0) <projectid> [<projectid> ...]"
   exit 1
 fi
@@ -18,7 +18,7 @@ function tasks() {
      return
   fi
 
-  list=$(echo $resp | xpath -q -e "//atividade/nome/text() | //atividade/id/text()" | sed "s/ /_/g")
+  list=$(echo $resp | xpath "//atividade/nome/text() | //atividade/id/text()" | sed "s/ /_/g")
 
   group "$list" 2
   echo "$group_result"

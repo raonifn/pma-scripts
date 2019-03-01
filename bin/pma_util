@@ -6,12 +6,16 @@ function readPass() {
 
 function handlePmaResponse() {
   response=$1
-  response_code=$(echo $response | xpath -q -e '//responseType/text()')
+  response_code=$(echo $response | xpath '//responseType/text()')
   if [ $response_code -ne 0 ]; then
-    response_error=$(echo $response | xpath -q -e '//erro/text()')
+    response_error=$(echo $response | xpath '//erro/text()')
   else
-    response_msgs=$(echo $response | xpath -q -e '//mensagem/text()')
+    response_msgs=$(echo $response | xpath '//mensagem/text()')
   fi
+}
+
+function xpath() {
+  xmllint --xpath $@ - 2> /dev/null
 }
 
 function group() {

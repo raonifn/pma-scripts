@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 source pma_util
 
@@ -13,7 +13,7 @@ function list() {
      exit 1
   fi
 
-  list=$(echo $resp | xpath -q -e "//apontamento/child::node()/text()" | sed "s/ /_/g")
+  list=$(echo $resp | xpath "//apontamento/child::node()/text()" | sed "s/ /_/g")
 
   group "$list" 6
   echo "$group_result"

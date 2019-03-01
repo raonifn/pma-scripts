@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 username=${1-$USER}
 
@@ -16,5 +16,5 @@ if [ $response_code != '0' ]; then
    exit 1
 fi
 
-echo $resp | xpath -q -e '//token/text()' > $HOME/.pma_token
+echo $resp | xpath '//token/text()' > $HOME/.pma_token
 cat $HOME/.pma_token
