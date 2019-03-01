@@ -4,7 +4,8 @@ username=${1-$USER}
 
 source pma_util
 
-readPass "$username"
+read -sp "($username) Password: " password
+echo
 
 resp=$(curl -s -X post https://pma.dextra.com.br/services/obter_token -d username=$username\&password=$password)
 
