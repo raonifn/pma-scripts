@@ -15,7 +15,7 @@ function handlePmaResponse() {
 }
 
 function xpath() {
-  xmllint --xpath $@ - 2> /dev/null
+  xmllint --xpath "$@" - 2> /dev/null
 }
 
 function group() {
