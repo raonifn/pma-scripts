@@ -1,20 +1,17 @@
 #!/bin/bash
 
-username=${1-$USER}
+dir=$(dirname $0)
 
-source pma_util
+username=${1-$USER}
 
 read -sp "($username) Password: " password
 echo
 
-resp=$(curl -s -X post https://pma.dextra.com.br/services/obter_token -d username=$username\&password=$password)
-
-handlePmaResponse "$resp"
-
-if [ $response_code != '0' ]; then
-   echo "$response_error"
+if ! curl -s -f -c $HOME/.pma_cookie https://pma.dextra.com.br/login.json -d "login=$username" -d "senha=$password"; then
+   echo "Error on new API Login"
    exit 1
 fi
 
-echo $resp | xpath '//token/text()' > $HOME/.pma_token
-cat $HOME/.pma_token
+echo
+echo "Loggin on Legacy API"
+$dir/pma_token_legacy $username $password

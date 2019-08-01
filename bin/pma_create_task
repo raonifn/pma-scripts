@@ -2,11 +2,10 @@
 
 function usage() {
   cat <<END
-Usage: $(basename $0) [options] <taskid> [description]
+Usage: $(basename $0) [options] <projectid> <taskid> [description]
    -h                 : This help
-   -d <date>          : Date to create (yyyy-MM-dd). Default value is today (date +'%F')
-   -e <effort time>   : Effort time (minutes). Default value is 480 (8 * 60)
-   -s <status>        : Status ('working' or 'concluded'). Default value is 'working'
+   -s <date>          : Start date (yyyy-MM-dd HH:mm). Default value is today (\$(date +'%F') 08:00)
+   -e <date>          : End date (yyyy-MM-dd). Default value is today (\$(date +'%F') 12:00)
 Description is not required. Default value is 'Devel'.
 END
 }
@@ -16,37 +15,30 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
-while getopts "h?e:d:s:" opt; do
+while getopts "h?s:e:" opt; do
     case "$opt" in
     h|\?)
         usage
         exit 0
         ;;
-    d)  date="$OPTARG" ;;
-    e)  effort="$OPTARG" ;;
-    s)  stat="$OPTARG" ;;
+    s)  start="$OPTARG" ;;
+    e)  end="$OPTARG" ;;
 
     esac
 done
-date=${date-$(date +'%F')}
-effort=${effort-'480'}
-stat=${stat-'working'}
+start=${start-"$(date +'%F') 08:00"}
+end=${end-"$(date +'%F') 12:00"}
 shift $(( OPTIND-1 ))
 
+project=$1
+shift
 task=$1
 shift
 description=${@-'Devel'}
 
-resp=$(curl -s -X post -G --data-urlencode token=$(cat $HOME/.pma_token) --data-urlencode data=$date --data-urlencode "atividadeId=$task" --data-urlencode "atividadeStatus=$stat" --data-urlencode "esforco=$effort" --data-urlencode "descricao=$description" https://pma.dextra.com.br/services/criar_apontamento)
-
-exit 1
-
-source pma_util
-handlePmaResponse "$resp"
-
-if [ $response_code != '0' ]; then
-   echo "$response_error"
-   exit 1
+if ! curl -f -s -c $HOME/.pma_cookie -b $HOME/.pma_cookie -X post -d "inicio=$start" -d "fim=$end" -d "projeto_id=$project" -d "atividade_id=$task" -d "descricao=$description" https://pma.dextra.com.br/registros.json; then
+    echo "Error creating appointment"
+    exit 1
 fi
 
-echo "$response_msgs"
+echo "Done"

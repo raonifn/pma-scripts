@@ -1,32 +1,29 @@
 #!/bin/bash
 
-source pma_util
-
-function list() {
-  date=$1
-  resp=$(curl -s -X post https://pma.dextra.com.br/services/listar_apontamentos -d token=$(cat $HOME/.pma_token)\&data=$date)
-
-  handlePmaResponse "$resp"
-
-  if [ $response_code != '0' ]; then
-     echo "$response_error"
-     exit 1
-  fi
-
-  list=$(echo $resp | xpath "//apontamento/child::node()/text()" | sed "s/ /_/g")
-
-  group "$list" 6
-  echo "$group_result"
+function usage() {
+  cat <<END
+Usage: $(basename $0) [options] [startDate] [endDate]
+   -h                 : This help
+If [endDate] is not defined, they will be today.
+If [startDate] is not defined, it will be \$endDate - 7.
+END
 }
 
-if [ $# -le 1 ]; then
-  date=${1-$(date +'%F')}
-  list $date
-  exit
+while getopts "h?" opt; do
+    case "$opt" in
+    h|\?)
+        usage
+        exit 0
+        ;;
+    esac
+done
+
+if [[ $# -eq 2 ]]; then
+  start=$1
+  end=$2
+else
+  end=${1-$(date +'%F')}
+  start=${2-$(date -d "$end -7 day" +'%F')}
 fi
 
-for k do
-  echo $k
-  list $k
-  echo
-done
+curl -s -b ~/.pma_cookie  -c ~/.pma_cookie -G -d "inicio=$start" -d "fim=$end" 'https://pma.dextra.com.br/registros.json' | jq '.[] | {id, inicio, fim, esforco, projeto_id, atividade_id, descricao, aprovacao}'

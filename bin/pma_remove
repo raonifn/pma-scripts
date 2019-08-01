@@ -1,0 +1,28 @@
+#!/bin/bash
+
+function usage() {
+  cat <<END
+Usage: $(basename $0) [options] <appointmentId>
+   -h                 : This help
+END
+}
+
+if [ $# -lt 1 ]; then
+  usage
+  exit 1
+fi
+
+while getopts "h?" opt; do
+    case "$opt" in
+    h|\?)
+        usage
+        exit 0
+        ;;
+    esac
+done
+id=$1
+
+if ! curl -s -X DELETE -b ~/.pma_cookie  https://pma.dextra.com.br/registros/$id.json; then
+    echo "Error removing appointment"
+    exit 1
+fi
